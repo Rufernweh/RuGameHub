@@ -1,0 +1,1177 @@
+
+
+{% load static %}
+<!DOCTYPE html>
+
+    
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>GoodGames | Community and Store HTML Game Template</title>
+
+    <meta name="description" content="GoodGames - Bootstrap template for communities and games store">
+    <meta name="keywords" content="game, gaming, template, HTML template, responsive, Bootstrap, premium">
+    <meta name="author" content="_nK">
+
+    <link rel="icon" type="image/png" href="{% static 'assets/images/favicon.png' %}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- START: Styles -->
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7cOpen+Sans:400,700" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap/dist/css/bootstrap.min.css' %}">
+
+    <!-- FontAwesome -->
+    <script defer src="{% static 'assets/vendor/fontawesome-free/js/all.js' %}"></script>
+    <script defer src="{% static 'assets/vendor/fontawesome-free/js/v4-shims.js' %}"></script>
+
+    <!-- IonIcons -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/ionicons/css/ionicons.min.css' %}">
+
+    <!-- Flickity -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/flickity/dist/flickity.min.css' %}">
+
+    <!-- Photoswipe -->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/photoswipe/dist/photoswipe.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/photoswipe/dist/default-skin/default-skin.css' %}">
+
+    <!-- Seiyria Bootstrap Slider -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/bootstrap-slider/dist/css/bootstrap-slider.min.css' %}">
+
+    <!-- Summernote -->
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/vendor/summernote/dist/summernote-bs4.css' %}">
+
+    <!-- GoodGames -->
+    <link rel="stylesheet" href="{% static 'assets/css/goodgames.css' %}">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+    
+    <!-- END: Styles -->
+
+    <!-- jQuery -->
+    <script src="{% static 'assets/vendor/jquery/dist/jquery.min.js' %}"></script>
+    <style>
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            
+          }
+      
+          .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+          }
+      
+          .btn-outline-primary {
+            color: #007bff;
+            border-color: #007bff;
+          }
+      
+          .btn-outline-primary:hover {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+          }
+
+          .modal-body .close {
+            position: absolute;
+            top: 10px;
+            right: -30px;
+          }
+          
+          .modal-body .text-center {
+            margin-bottom: 10px;
+          }
+
+          .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: auto; /* Push the logo to the right */
+          }
+          
+          .logo img {
+            width: 20px; /* Reduce the logo size */
+            height: auto;
+            margin: 0 20px; /* Add margin around the logo */
+          }
+          
+
+
+          /*
+=====
+HELPERS
+=====
+*/
+
+.ha-screen-reader{
+  width: var(--ha-screen-reader-width, 1px);
+  height: var(--ha-screen-reader-height, 1px);
+  padding: var(--ha-screen-reader-padding, 0);
+  border: var(--ha-screen-reader-border, none);
+
+  position: var(--ha-screen-reader-position, absolute);
+  clip: var(--ha-screen-reader-clip, rect(1px, 1px, 1px, 1px));
+  overflow: var(--ha-screen-reader-overflow, hidden);
+}
+
+/*
+=====
+RESET STYLES
+=====
+*/
+
+.field__input{ 
+  --uiFieldPlaceholderColor: var(--fieldPlaceholderColor, #767676);
+  
+  background-color: transparent;
+  border-radius: 0;
+  border: none;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.field__input:focus::-webkit-input-placeholder{
+  color: var(--uiFieldPlaceholderColor);
+}
+
+.field__input:focus::-moz-placeholder{
+  color: var(--uiFieldPlaceholderColor);
+}
+
+/*
+=====
+CORE STYLES
+=====
+*/
+
+.field{
+  --uiFieldBorderWidth: var(--fieldBorderWidth, 2px);
+  --uiFieldPaddingRight: var(--fieldPaddingRight, 1rem);
+  --uiFieldPaddingLeft: var(--fieldPaddingLeft, 1rem);   
+  --uiFieldBorderColorActive: var(--fieldBorderColorActive, rgba(22, 22, 22, 1));
+
+  display: var(--fieldDisplay, inline-flex);
+  position: relative;
+  font-size: var(--fieldFontSize, 1rem);
+}
+
+.field__input{
+  box-sizing: border-box;
+  width: var(--fieldWidth, 100%);
+  height: var(--fieldHeight, 3rem);
+  padding: var(--fieldPaddingTop, 1.25rem) var(--uiFieldPaddingRight) var(--fieldPaddingBottom, .5rem) var(--uiFieldPaddingLeft);
+  border-bottom: var(--uiFieldBorderWidth) solid var(--fieldBorderColor, rgba(0, 0, 0, .25));  
+}
+
+.field__input:focus{
+  outline: none;
+}
+
+.field__input::-webkit-input-placeholder{
+  opacity: 0;
+  transition: opacity .2s ease-out;
+}
+
+.field__input::-moz-placeholder{
+  opacity: 0;
+  transition: opacity .2s ease-out;
+}
+
+.field__input:focus::-webkit-input-placeholder{
+  opacity: 1;
+  transition-delay: .2s;
+}
+
+.field__input:focus::-moz-placeholder{
+  opacity: 1;
+  transition-delay: .2s;
+}
+
+.field__label-wrap{
+  box-sizing: border-box;
+  pointer-events: none;
+  cursor: text;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.field__label-wrap::after{
+  content: "";
+  box-sizing: border-box;
+  width: 100%;
+  height: 0;
+  opacity: 0;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.field__input:focus ~ .field__label-wrap::after{
+  opacity: 1;
+}
+
+.field__label{
+  position: absolute;
+  left: var(--uiFieldPaddingLeft);
+  top: calc(50% - .5em);
+
+  line-height: 1;
+  font-size: var(--fieldHintFontSize, inherit);
+
+  transition: top .2s cubic-bezier(0.9, -0.15, 0.1, 1.15), opacity .2s ease-out, font-size .2s ease-out;
+}
+
+.field__input:focus ~ .field__label-wrap .field__label,
+.field__input:not(:placeholder-shown) ~ .field__label-wrap .field__label{
+  --fieldHintFontSize: var(--fieldHintFontSizeFocused, .75rem);
+
+  top: var(--fieldHintTopHover, .25rem);
+}
+
+/* 
+effect 1
+*/
+
+.field_v1 .field__label-wrap::after{
+  border-bottom: var(--uiFieldBorderWidth) solid var(--uiFieldBorderColorActive);
+  transition: opacity .2s ease-out;
+}
+
+/* 
+effect 2
+*/
+
+.field_v2 .field__label-wrap{
+  overflow: hidden;
+}
+
+.field_v2 .field__label-wrap::after{
+  border-bottom: var(--uiFieldBorderWidth) solid var(--uiFieldBorderColorActive);
+  transform: translate3d(-105%, 0, 0);
+  transition: transform .285s ease-out .2s, opacity .2s ease-out .2s;
+}
+
+.field_v2 .field__input:focus ~ .field__label-wrap::after{
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0;
+}
+
+/*
+effect 3
+*/
+
+.field_v3 .field__label-wrap::after{
+  border: var(--uiFieldBorderWidth) solid var(--uiFieldBorderColorActive);
+  transition: height .2s ease-out, opacity .2s ease-out;
+}
+
+.field_v3 .field__input:focus ~ .field__label-wrap::after{
+  height: 100%;
+}
+
+/*
+=====
+LEVEL 4. SETTINGS
+=====
+*/
+
+.field{
+  --fieldBorderColor: #D1C4E9;
+  --fieldBorderColorActive: #673AB7;
+}
+
+/*
+=====
+DEMO
+=====
+*/
+
+body{
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Open Sans, Ubuntu, Fira Sans, Helvetica Neue, sans-serif;
+  margin: 0;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page{
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  padding: 1rem;
+
+  display: grid;
+  grid-gap: 30px;
+}
+
+.linktr{
+  order: -1;
+  padding: 1.75rem;
+  text-align: center;
+}
+
+.linktr__goal{
+  background-color: rgb(209, 246, 255);
+  color: rgb(8, 49, 112);
+  box-shadow: rgb(8 49 112 / 24%) 0px 2px 8px 0px;
+  border-radius: 2rem;
+  padding: .5rem 1.25rem;
+}
+
+@media (min-width: 1024px){
+  
+  .linktr{
+    position: absolute; 
+    right: 1rem; 
+    bottom: 1rem;
+  }
+}
+
+.r-link{
+    --uirLinkDisplay: var(--rLinkDisplay, inline-flex);
+    --uirLinkTextColor: var(--rLinkTextColor);
+    --uirLinkTextDecoration: var(--rLinkTextDecoration, none);
+
+    display: var(--uirLinkDisplay) !important;
+    color: var(--uirLinkTextColor) !important;
+    text-decoration: var(--uirLinkTextDecoration) !important;
+}
+#container
+{
+    background: transparent;
+    border-radius: 10px;
+}
+
+button, #slctcolor, #fonts {
+    width: 150px;
+    height: 40px;
+    border: 0px;
+    background: #656565;
+    color: white;
+}
+
+#text
+{
+    height: 400px;
+    width: 600px;
+    background: black;
+    color: white;
+    font-size: 2em;
+    font-weight: 100;
+}
+
+body { background: #000000; }
+
+ul li { display: inline-block; margin-right: 10px; }
+#form-icon {
+    color: red;
+  }
+
+  .errorlist {
+    left: 0;
+    top: 0;
+    right: 0;
+    width: 100%;
+    background-color: #ff0008a0;
+    padding: 5px 15px;
+    text-align: center;
+    list-style: none;
+    color: aliceblue;
+    font: 1.5em bold;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+     position: relative;
+    animation-name: example;
+    animation-duration: 4s;
+    animation-iteration-count: 3;
+}
+@keyframes example {
+  0%   {background-color:red; left:0px; top:0px;}
+  25%   {background-color:#ff0008a0; left:0px; top:30px;}
+}
+
+.form-control {
+    font-size: 12px;
+    vertical-align: top;
+  }
+
+   #image-preview-container {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      
+      #image-preview-container li {
+        position: relative;
+        display: inline-block;
+        margin: 5px;
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(3, 3, 3, 0.2);
+      }
+      
+      #image-preview-container li img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      #image-preview-container li button {
+        height: max-content;
+        position: absolute;
+        top: -15px;
+        right: 20px;
+        padding: 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background: none;
+        color: rgb(203, 77, 77);
+        }
+        .inputWrapper {
+        height: 30px;
+        width: 90px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        /*Using a background color, but you can use a background image to represent a button*/
+        background-color: transparent;
+        margin-right: 10px;
+        }
+        .fileInput {
+            cursor: pointer;
+            height: 100%;
+            position:absolute;
+            top: 0;
+            right: 0;
+            z-index: 99;
+            /*This makes the button huge. If you want a bigger button, increase the font size*/
+            font-size:50px;
+            /*Opacity settings for all browsers*/
+            opacity: 0;
+            -moz-opacity: 0;
+            filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0)
+        }
+
+
+
+          
+    </style>
+    
+      
+    
+    
+</head>
+
+
+<!--
+    Additional Classes:
+        .nk-page-boxed
+-->
+<body>
+    
+        
+
+
+
+<!--
+    Additional Classes:
+        .nk-header-opaque
+-->
+<header class="nk-header nk-header-opaque">
+
+    
+    
+<!-- START: Top Contacts -->
+<div class="nk-contacts-top">
+    <div class="container">
+        <div class="nk-contacts-left">
+            <ul class="nk-social-links">
+                <li><a class="nk-social-rss" href="#"><span class="fa fa-rss"></span></a></li>
+                <li><a class="nk-social-twitch" href="#"><span class="fab fa-twitch"></span></a></li>
+                <li><a class="nk-social-steam" href="#"><span class="fab fa-steam"></span></a></li>
+                <li><a class="nk-social-facebook" href="#"><span class="fab fa-facebook"></span></a></li>
+                <li><a class="nk-social-google-plus" href="#"><span class="fab fa-google-plus"></span></a></li>
+                <li><a class="nk-social-twitter" href="#" target="_blank"><span class="fab fa-twitter"></span></a></li>
+                <li><a class="nk-social-pinterest" href="#"><span class="fab fa-pinterest-p"></span></a></li>
+
+                <!-- Additional Social Buttons
+                    <li><a class="nk-social-behance" href="#"><span class="fab fa-behance"></span></a></li>
+                    <li><a class="nk-social-bitbucket" href="#"><span class="fab fa-bitbucket"></span></a></li>
+                    <li><a class="nk-social-dropbox" href="#"><span class="fab fa-dropbox"></span></a></li>
+                    <li><a class="nk-social-dribbble" href="#"><span class="fab fa-dribbble"></span></a></li>
+                    <li><a class="nk-social-deviantart" href="#"><span class="fab fa-deviantart"></span></a></li>
+                    <li><a class="nk-social-flickr" href="#"><span class="fab fa-flickr"></span></a></li>
+                    <li><a class="nk-social-foursquare" href="#"><span class="fab fa-foursquare"></span></a></li>
+                    <li><a class="nk-social-github" href="#"><span class="fab fa-github"></span></a></li>
+                    <li><a class="nk-social-instagram" href="#"><span class="fab fa-instagram"></span></a></li>
+                    <li><a class="nk-social-linkedin" href="#"><span class="fab fa-linkedin"></span></a></li>
+                    <li><a class="nk-social-medium" href="#"><span class="fab fa-medium"></span></a></li>
+                    <li><a class="nk-social-odnoklassniki" href="#"><span class="fab fa-odnoklassniki"></span></a></li>
+                    <li><a class="nk-social-paypal" href="#"><span class="fab fa-paypal"></span></a></li>
+                    <li><a class="nk-social-reddit" href="#"><span class="fab fa-reddit"></span></a></li>
+                    <li><a class="nk-social-skype" href="#"><span class="fab fa-skype"></span></a></li>
+                    <li><a class="nk-social-soundcloud" href="#"><span class="fab fa-soundcloud"></span></a></li>
+                    <li><a class="nk-social-slack" href="#"><span class="fab fa-slack"></span></a></li>
+                    <li><a class="nk-social-tumblr" href="#"><span class="fab fa-tumblr"></span></a></li>
+                    <li><a class="nk-social-vimeo" href="#"><span class="fab fa-vimeo"></span></a></li>
+                    <li><a class="nk-social-vk" href="#"><span class="fab fa-vk"></span></a></li>
+                    <li><a class="nk-social-wordpress" href="#"><span class="fab fa-wordpress"></span></a></li>
+                    <li><a class="nk-social-youtube" href="#"><span class="fab fa-youtube"></span></a></li>
+                -->
+            </ul>
+        </div>
+        <div class="nk-contacts-right">
+            <ul class="nk-contacts-icons">
+                
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#modalSearch">
+                        <span class="fa fa-search"></span>
+                    </a>
+                </li>
+                
+                
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#modalLogin">
+                        <span class="fa fa-user"></span>
+                    </a>
+                </li>
+                
+                
+                
+                
+                <li>
+                    <span class="nk-cart-toggle">
+                        <span class="fa fa-shopping-cart"></span>
+                        <span class="nk-badge">27</span>
+                    </span>
+                    <div class="nk-cart-dropdown">
+                        
+                        <div class="nk-widget-post">
+                            <a href="store-product.html" class="nk-post-image">
+                                <img src="{% static 'assets/images/product-5-xs.jpg' %}" alt="In all revolutions of">
+                            </a>
+                            <h3 class="nk-post-title">
+                                <a href="#" class="nk-cart-remove-item"><span class="ion-android-close"></span></a>
+                                <a href="store-product.html">In all revolutions of</a>
+                            </h3>
+                            <div class="nk-gap-1"></div>
+                            <div class="nk-product-price">€ 23.00</div>
+                        </div>
+                        
+                        <div class="nk-widget-post">
+                            <a href="store-product.html" class="nk-post-image">
+                                <img src="{% static 'assets/images/product-7-xs.jpg' %}" alt="With what mingled joy">
+                            </a>
+                            <h3 class="nk-post-title">
+                                <a href="#" class="nk-cart-remove-item"><span class="ion-android-close"></span></a>
+                                <a href="store-product.html">With what mingled joy</a>
+                            </h3>
+                            <div class="nk-gap-1"></div>
+                            <div class="nk-product-price">€ 14.00</div>
+                        </div>
+                        
+                        <div class="nk-gap-2"></div>
+                        <div class="text-center">
+                            <a href="store-checkout.html" class="nk-btn nk-btn-rounded nk-btn-color-main-1 nk-btn-hover-color-white">Proceed to Checkout</a>
+                        </div>
+                    </div>
+                </li>
+                
+
+                <li>
+                    <div class="logo">
+                        <a><img src={% if company.user %} {{company.icon.url}} {% else %} "https://static.wikia.nocookie.net/gtawiki/images/4/4c/Rockstar_Toronto_Logo.png/revision/latest?cb=20100211092108"  {% endif %} alt="Company Logo"></a>
+                        <a href={% if company %} "{% url 'games:company-account' %}" {% else %}  "{% url 'games:create-company' %} {% endif %}" style="color: snow;text-decoration: none; ">  {% if company.user %} {{company.name}} {% else %} Company {% endif %} </a>
+                      </div>
+                </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- END: Top Contacts -->
+
+    
+
+    <!--
+        START: Navbar
+
+        Additional Classes:
+            .nk-navbar-sticky
+            .nk-navbar-transparent
+            .nk-navbar-autohide
+    -->
+    <nav class="nk-navbar nk-navbar-top nk-navbar-sticky nk-navbar-autohide">
+        <div class="container">
+            <div class="nk-nav-table">
+                
+                <a href="index.html" class="nk-nav-logo">
+                    <img src="{% static 'assets/images/logo.png' %}" alt="GoodGames" width="199">
+                </a>
+                
+                <ul class="nk-nav nk-nav-right d-none d-lg-table-cell" data-nav-mobile="#nk-nav-mobile">
+                    
+        <li class=" nk-drop-item">
+            <a href="elements.html">
+                Features
+                
+            </a><ul class="dropdown">
+                        
+        <li>
+            <a href="elements.html">
+                Elements (Shortcodes)
+                
+            </a>
+        </li>
+        <li class=" nk-drop-item">
+            <a href="forum.html">
+                Forum
+                
+            </a><ul class="dropdown">
+                        
+        <li>
+            <a href="forum.html">
+                Forum
+                
+            </a>
+        </li>
+        <li>
+            <a href="forum-topics.html">
+                Topics
+                
+            </a>
+        </li>
+        <li>
+            <a href="forum-single-topic.html">
+                Single Topic
+                
+            </a>
+        </li>
+                    </ul>
+        </li>
+        <li>
+            <a href="widgets.html">
+                Widgets
+                
+            </a>
+        </li>
+        <li>
+            <a href="coming-soon.html">
+                Coming Soon
+                
+            </a>
+        </li>
+        <li>
+            <a href="offline.html">
+                Offline
+                
+            </a>
+        </li>
+        <li>
+            <a href="404.html">
+                404
+                
+            </a>
+        </li>
+                    </ul>
+        </li>
+        <li class=" nk-drop-item">
+            <a href="blog-list.html">
+                Blog
+                
+            </a><ul class="dropdown">
+                        
+        <li>
+            <a href="news.html">
+                News
+                
+            </a>
+        </li>
+        <li class=" nk-drop-item">
+            <a href="blog-grid.html">
+                Blog With Sidebar
+                
+            </a><ul class="dropdown">
+                        
+        <li>
+            <a href="blog-grid.html">
+                Blog Grid
+                
+            </a>
+        </li>
+        <li>
+            <a href="blog-list.html">
+                Blog List
+                
+            </a>
+        </li>
+                    </ul>
+        </li>
+        <li>
+            <a href="blog-fullwidth.html">
+                Blog Fullwidth
+                
+            </a>
+        </li>
+        <li>
+            <a href="blog-article.html">
+                Blog Article
+                
+            </a>
+        </li>
+                    </ul>
+        </li>
+        <li>
+            <a href="gallery.html">
+                Gallery
+                
+            </a>
+        </li>
+        <li class=" nk-drop-item">
+            <a href="tournaments.html">
+                Tournaments
+                
+            </a><ul class="dropdown">
+                        
+        <li>
+            <a href="tournaments.html">
+                Tournament
+                
+            </a>
+        </li>
+        <li>
+            <a href="tournaments-teams.html">
+                Teams
+                
+            </a>
+        </li>
+        <li>
+            <a href="tournaments-teammate.html">
+                Teammate
+                
+            </a>
+        </li>
+                    </ul>
+        </li>
+        <li class=" nk-drop-item">
+            <a href="store.html">
+                Store
+                
+            </a><ul class="dropdown">
+                        
+        <li>
+            <a href="store.html">
+                Store
+                
+            </a>
+        </li>
+        <li>
+            <a href="store-product.html">
+                Product
+                
+            </a>
+        </li>
+        <li>
+            <a href="store-catalog.html">
+                Catalog
+                
+            </a>
+        </li>
+        <li>
+            <a href="store-catalog-alt.html">
+                Catalog Alt
+                
+            </a>
+        </li>
+        <li>
+            <a href="store-checkout.html">
+                Checkout
+                
+            </a>
+        </li>
+        <li>
+            <a href="store-cart.html">
+                Cart
+                
+            </a>
+        </li>
+                    </ul>
+        </li>
+                </ul>
+                <ul class="nk-nav nk-nav-right nk-nav-icons">
+                    
+                        <li class="single-icon d-lg-none">
+                            <a href="#" class="no-link-effect" data-nav-toggle="#nk-nav-mobile">
+                                <span class="nk-icon-burger">
+                                    <span class="nk-t-1"></span>
+                                    <span class="nk-t-2"></span>
+                                    <span class="nk-t-3"></span>
+                                </span>
+                            </a>
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+{% block body %}
+{% endblock body %}
+
+    <!-- END: Navbar -->
+
+</header>
+            <!-- START: Footer -->
+            <footer class="nk-footer">
+
+                <div class="container">
+                    <div class="nk-gap-3"></div>
+                    <div class="row vertical-gap">
+                        <div class="col-md-6">
+                            <div class="nk-widget">
+                                <h4 class="nk-widget-title"><span class="text-main-1">Contact</span> With Us</h4>
+                                <div class="nk-widget-content">
+                                    <form action="php/ajax-contact-form.php" class="nk-form nk-form-ajax">
+                                        <div class="row vertical-gap sm-gap">
+                                            <div class="col-md-6">
+                                                <input type="email" class="form-control required" name="email" placeholder="Email *">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control required" name="name" placeholder="Name *">
+                                            </div>
+                                        </div>
+                                        <div class="nk-gap"></div>
+                                        <textarea class="form-control required" name="message" rows="5" placeholder="Message *"></textarea>
+                                        <div class="nk-gap-1"></div>
+                                        <button class="nk-btn nk-btn-rounded nk-btn-color-white">
+                                            <span>Send</span>
+                                            <span class="icon"><i class="ion-paper-airplane"></i></span>
+                                        </button>
+                                        <div class="nk-form-response-success"></div>
+                                        <div class="nk-form-response-error"></div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="nk-widget">
+                                <h4 class="nk-widget-title"><span class="text-main-1">Latest</span> Posts</h4>
+                                <div class="nk-widget-content">
+                                    <div class="row vertical-gap sm-gap">
+                                        
+                                        <div class="col-lg-6">
+                                            <div class="nk-widget-post-2">
+                                                <a href="blog-article.html" class="nk-post-image">
+                                                    <img src="{% static 'assets/images/post-1-sm.jpg' %}" alt="">
+                                                </a>
+                                                <div class="nk-post-title"><a href="blog-article.html">Smell magic in the air. Or maybe barbecue</a></div>
+                                                <div class="nk-post-date">
+                                                    <span class="fa fa-calendar"></span> Sep 18, 2018
+                                                    <span class="fa fa-comments"></span> <a href="#">4</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-6">
+                                            <div class="nk-widget-post-2">
+                                                <a href="blog-article.html" class="nk-post-image">
+                                                    <img src="{% static 'assets/images/post-2-sm.jpg' %}" alt="">
+                                                </a>
+                                                <div class="nk-post-title"><a href="blog-article.html">Grab your sword and fight the Horde</a></div>
+                                                <div class="nk-post-date">
+                                                    <span class="fa fa-calendar"></span> Sep 5, 2018
+                                                    <span class="fa fa-comments"></span> <a href="#">7</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="nk-widget">
+                                <h4 class="nk-widget-title"><span class="text-main-1">In</span> Twitter</h4>
+                                <div class="nk-widget-content">
+                                    <div class="nk-twitter-list" data-twitter-count="1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nk-gap-3"></div>
+                </div>
+            
+                <div class="nk-copyright">
+                    <div class="container">
+                        <div class="nk-copyright-left">
+                            <a target="_blank" href="https://www.templateshub.net">Templates Hub</a>
+                        </div>
+                        <div class="nk-copyright-right">
+                            <ul class="nk-social-links-2">
+                                <li><a class="nk-social-rss" href="#"><span class="fa fa-rss"></span></a></li>
+                                <li><a class="nk-social-twitch" href="#"><span class="fab fa-twitch"></span></a></li>
+                                <li><a class="nk-social-steam" href="#"><span class="fab fa-steam"></span></a></li>
+                                <li><a class="nk-social-facebook" href="#"><span class="fab fa-facebook"></span></a></li>
+                                <li><a class="nk-social-google-plus" href="#"><span class="fab fa-google-plus"></span></a></li>
+                                <li><a class="nk-social-twitter" href="#" target="_blank"><span class="fab fa-twitter"></span></a></li>
+                                <li><a class="nk-social-pinterest" href="#"><span class="fab fa-pinterest-p"></span></a></li>
+            
+                                <!-- Additional Social Buttons
+                                    <li><a class="nk-social-behance" href="#"><span class="fab fa-behance"></span></a></li>
+                                    <li><a class="nk-social-bitbucket" href="#"><span class="fab fa-bitbucket"></span></a></li>
+                                    <li><a class="nk-social-dropbox" href="#"><span class="fab fa-dropbox"></span></a></li>
+                                    <li><a class="nk-social-dribbble" href="#"><span class="fab fa-dribbble"></span></a></li>
+                                    <li><a class="nk-social-deviantart" href="#"><span class="fab fa-deviantart"></span></a></li>
+                                    <li><a class="nk-social-flickr" href="#"><span class="fab fa-flickr"></span></a></li>
+                                    <li><a class="nk-social-foursquare" href="#"><span class="fab fa-foursquare"></span></a></li>
+                                    <li><a class="nk-social-github" href="#"><span class="fab fa-github"></span></a></li>
+                                    <li><a class="nk-social-instagram" href="#"><span class="fab fa-instagram"></span></a></li>
+                                    <li><a class="nk-social-linkedin" href="#"><span class="fab fa-linkedin"></span></a></li>
+                                    <li><a class="nk-social-medium" href="#"><span class="fab fa-medium"></span></a></li>
+                                    <li><a class="nk-social-odnoklassniki" href="#"><span class="fab fa-odnoklassniki"></span></a></li>
+                                    <li><a class="nk-social-paypal" href="#"><span class="fab fa-paypal"></span></a></li>
+                                    <li><a class="nk-social-reddit" href="#"><span class="fab fa-reddit"></span></a></li>
+                                    <li><a class="nk-social-skype" href="#"><span class="fab fa-skype"></span></a></li>
+                                    <li><a class="nk-social-soundcloud" href="#"><span class="fab fa-soundcloud"></span></a></li>
+                                    <li><a class="nk-social-slack" href="#"><span class="fab fa-slack"></span></a></li>
+                                    <li><a class="nk-social-tumblr" href="#"><span class="fab fa-tumblr"></span></a></li>
+                                    <li><a class="nk-social-vimeo" href="#"><span class="fab fa-vimeo"></span></a></li>
+                                    <li><a class="nk-social-vk" href="#"><span class="fab fa-vk"></span></a></li>
+                                    <li><a class="nk-social-wordpress" href="#"><span class="fab fa-wordpress"></span></a></li>
+                                    <li><a class="nk-social-youtube" href="#"><span class="fab fa-youtube"></span></a></li>
+                                -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!-- END: Footer -->
+            
+                    
+                </div>
+            
+                
+            
+                
+                    <!-- START: Page Background -->
+            
+                <img class="nk-page-background-top" src="{% static 'assets/images/bg-top.png' %}" alt="">
+                <img class="nk-page-background-bottom" src="{% static 'assets/images/bg-bottom.png' %}" alt="">
+            
+            <!-- END: Page Background -->
+            
+                
+            
+                
+                    <!-- START: Search Modal -->
+            <div class="nk-modal modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span class="ion-android-close"></span>
+                            </button>
+            
+                            <h4 class="mb-0">Search</h4>
+            
+                            <div class="nk-gap-1"></div>
+                            <form action="#" class="nk-form nk-form-style-1">
+                                <input type="text" value="" name="search" class="form-control" placeholder="Type something and press Enter" autofocus>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END: Search Modal -->
+                
+            
+                
+                    <!-- START: Login Modal -->
+            <div class="nk-modal modal fade" id="modalLogin" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                                <span class="ion-android-close"></span>
+                            </button>
+                            <div class="text-center">
+                                <h4 class="mb-0"><span class="text-main-1">Login</span> / Register</h4>
+                               
+                                <a href="{% url 'users:profile' %}" style="position: relative; top: -40px; left: -180px; right: 70px; border-radius: 5px; box-shadow: 0 0 5px rgb(255, 255, 255); transition: transform 0.2s ease-in-out; background-color: transparent; color: white;">{% if user %} Profile {% endif %}</a>
+                            
+                                <p>{{user.email}}</p>
+                                <form action="#" class="nk-form text-white">
+                                    <div class="row vertical-gap">
+                                        
+                                        <div class="col-md-6">
+                                            <a class="btn btn-danger btn-lg d-none d-md-inline-block mx-auto" href="/users/login/" style="background-color: #171e22; border-color: red; box-shadow: 0 0 10px rgba(0,0,0,0.5);">Login</a>
+                                          </div>
+                                          <div class="col-md-6">
+
+                                            <a class="btn btn-danger btn-lg d-none d-md-inline-block mx-auto" href="/users/register/" style="background-color: #171e22; border-color: red; box-shadow: 0 0 10px rgba(0,0,0,0.5); ">Register</a>
+                                          </div>
+                                        
+                                    </div>
+                                </form>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END: Login Modal -->
+            
+                
+            
+                
+            <!-- START: Scripts -->
+            
+            <!-- Object Fit Polyfill -->
+            <script src="{% static 'assets/vendor/object-fit-images/dist/ofi.min.js' %}"></script>
+            
+            <!-- GSAP -->
+            <script src="{% static 'assets/vendor/gsap/src/minified/TweenMax.min.js' %}"></script>
+            <script src="{% static 'assets/vendor/gsap/src/minified/plugins/ScrollToPlugin.min.js' %}"></script>
+            
+            <!-- Popper -->
+            <script src="{% static 'assets/vendor/popper.js/dist/umd/popper.min.js' %}"></script>
+            
+            <!-- Bootstrap -->
+            <script src="{% static 'assets/vendor/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+            
+            <!-- Sticky Kit -->
+            <script src="{% static 'assets/vendor/sticky-kit/dist/sticky-kit.min.js' %}"></script>
+            
+            <!-- Jarallax -->
+            <script src="{% static 'assets/vendor/jarallax/dist/jarallax.min.js' %}"></script>
+            <script src="{% static 'assets/vendor/jarallax/dist/jarallax-video.min.js' %}"></script>
+            
+            <!-- imagesLoaded -->
+            <script src="{% static 'assets/vendor/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+            
+            <!-- Flickity -->
+            <script src="{% static 'assets/vendor/flickity/dist/flickity.pkgd.min.js' %}"></script>
+            
+            <!-- Photoswipe -->
+            <script src="{% static 'assets/vendor/photoswipe/dist/photoswipe.min.js' %}"></script>
+            <script src="{% static 'assets/vendor/photoswipe/dist/photoswipe-ui-default.min.js' %}"></script>
+            
+            <!-- Jquery Validation -->
+            <script src="{% static 'assets/vendor/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+            
+            <!-- Jquery Countdown + Moment -->
+            <script src="{% static 'assets/vendor/jquery-countdown/dist/jquery.countdown.min.js' %}"></script>
+            <script src="{% static 'assets/vendor/moment/min/moment.min.js' %}"></script>
+            <script src="{% static 'assets/vendor/moment-timezone/builds/moment-timezone-with-data.min.js' %}"></script>
+            
+            <!-- Hammer.js -->
+            <script src="{% static 'assets/vendor/hammerjs/hammer.min.js' %}"></script>
+            
+            <!-- NanoSroller -->
+            <script src="{% static 'assets/vendor/nanoscroller/bin/javascripts/jquery.nanoscroller.js' %}"></script>
+            
+            <!-- SoundManager2 -->
+            <script src="{% static 'assets/vendor/soundmanager2/script/soundmanager2-nodebug-jsmin.js' %}"></script>
+            
+            <!-- Seiyria Bootstrap Slider -->
+            <script src="{% static 'assets/vendor/bootstrap-slider/dist/bootstrap-slider.min.js' %}"></script>
+            
+            <!-- Summernote -->
+            <script src="{% static 'assets/vendor/summernote/dist/summernote-bs4.min.js' %}"></script>
+            
+            <!-- nK Share -->
+            <script src="{% static 'assets/plugins/nk-share/nk-share.js' %}"></script>
+            
+            <!-- GoodGames -->
+            <script src="{% static 'assets/js/goodgames.min.js' %}"></script>
+            <script src="{% static 'assets/js/goodgames-init.js' %}"></script>
+            <!-- END: Scripts -->
+
+            <script>
+    function previewImages(input) {
+    var preview = document.querySelector('#image-preview-container');
+    var fileCountElement = document.querySelector('#file-count');
+        
+    if (input.files && input.files.length > 0 && input.files.length <= 10) {
+        preview.innerHTML = '';
+        fileCountElement.textContent = input.files.length + " files chosen";
+
+        for (var i = 0; i < input.files.length; i++) {
+        if (input.files[i].type.match(/^image\//)) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+            var li = document.createElement('li');
+            var img = document.createElement('img');
+            var removeBtn = document.createElement('button');
+            var removeIcon = document.createElement('span');
+            removeIcon.classList.add('fas', 'fa-times');
+            removeBtn.appendChild(removeIcon);
+            img.src = e.target.result;
+            li.appendChild(img);
+            li.appendChild(removeBtn);
+            preview.appendChild(li);
+
+            removeBtn.addEventListener('click', function() {
+            var listItem = this.closest('li');
+            var itemIndex = Array.from(listItem.parentNode.children).indexOf(listItem);
+            
+            // Remove the file from the FileList
+            var newFileList = new DataTransfer();
+            for (var i = 0; i < input.files.length; i++) {
+                if (i !== itemIndex) {
+                    newFileList.items.add(input.files[i]);
+                }
+            }
+            input.files = newFileList.files;
+            
+            // Remove the preview image
+            listItem.remove();
+
+            // Update the file count element
+            fileCountElement.innerHTML = `${preview.childElementCount} files chosen`;
+        });
+            }
+            reader.readAsDataURL(input.files[i]);
+        } else {
+            fileCountElement.textContent = preview.childElementCount + " files chosen";
+            preview.innerHTML = 'You can only select images.';
+        }
+        }
+    } else {
+        input.value = '';
+        fileCountElement.textContent = "No file chosen";
+        preview.innerHTML = 'You can only select up to 10 images.';
+    }
+    }                   
+     
+            </script>
+             
+                
+                
+          
+            
+            
+                
+</body>
+</html>
+
