@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>GoodGames | Community and Store HTML Game Template</title>
+    <title>RuGameHub</title>
 
     <meta name="description" content="GoodGames - Bootstrap template for communities and games store">
     <meta name="keywords" content="game, gaming, template, HTML template, responsive, Bootstrap, premium">
@@ -507,13 +507,12 @@ ul li { display: inline-block; margin-right: 10px; }
     <div class="container">
         <div class="nk-contacts-left">
             <ul class="nk-social-links">
-                <li><a class="nk-social-rss" href="#"><span class="fa fa-rss"></span></a></li>
+                <li><a class="nk-social-instagram" href="#"><span class="fa fa-instagram"></span></a></li>
                 <li><a class="nk-social-twitch" href="#"><span class="fab fa-twitch"></span></a></li>
                 <li><a class="nk-social-steam" href="#"><span class="fab fa-steam"></span></a></li>
                 <li><a class="nk-social-facebook" href="#"><span class="fab fa-facebook"></span></a></li>
-                <li><a class="nk-social-google-plus" href="#"><span class="fab fa-google-plus"></span></a></li>
                 <li><a class="nk-social-twitter" href="#" target="_blank"><span class="fab fa-twitter"></span></a></li>
-                <li><a class="nk-social-pinterest" href="#"><span class="fab fa-pinterest-p"></span></a></li>
+               
 
                 <!-- Additional Social Buttons
                     <li><a class="nk-social-behance" href="#"><span class="fab fa-behance"></span></a></li>
@@ -560,43 +559,7 @@ ul li { display: inline-block; margin-right: 10px; }
                 
                 
                 
-                <li>
-                    <span class="nk-cart-toggle">
-                        <span class="fa fa-shopping-cart"></span>
-                        <span class="nk-badge">27</span>
-                    </span>
-                    <div class="nk-cart-dropdown">
-                        
-                        <div class="nk-widget-post">
-                            <a href="store-product.html" class="nk-post-image">
-                                <img src="{% static 'assets/images/product-5-xs.jpg' %}" alt="In all revolutions of">
-                            </a>
-                            <h3 class="nk-post-title">
-                                <a href="#" class="nk-cart-remove-item"><span class="ion-android-close"></span></a>
-                                <a href="store-product.html">In all revolutions of</a>
-                            </h3>
-                            <div class="nk-gap-1"></div>
-                            <div class="nk-product-price">€ 23.00</div>
-                        </div>
-                        
-                        <div class="nk-widget-post">
-                            <a href="store-product.html" class="nk-post-image">
-                                <img src="{% static 'assets/images/product-7-xs.jpg' %}" alt="With what mingled joy">
-                            </a>
-                            <h3 class="nk-post-title">
-                                <a href="#" class="nk-cart-remove-item"><span class="ion-android-close"></span></a>
-                                <a href="store-product.html">With what mingled joy</a>
-                            </h3>
-                            <div class="nk-gap-1"></div>
-                            <div class="nk-product-price">€ 14.00</div>
-                        </div>
-                        
-                        <div class="nk-gap-2"></div>
-                        <div class="text-center">
-                            <a href="store-checkout.html" class="nk-btn nk-btn-rounded nk-btn-color-main-1 nk-btn-hover-color-white">Proceed to Checkout</a>
-                        </div>
-                    </div>
-                </li>
+            
                 
 
                 <li>
@@ -632,191 +595,60 @@ ul li { display: inline-block; margin-right: 10px; }
                 
                 <ul class="nk-nav nk-nav-right d-none d-lg-table-cell" data-nav-mobile="#nk-nav-mobile">
                     
-        <li class=" nk-drop-item">
-            <a href="elements.html">
-                Features
-                
-            </a><ul class="dropdown">
-                        
         <li>
-            <a href="elements.html">
-                Elements (Shortcodes)
+            <a href="{% url 'games:index' %}">
+                Home
                 
             </a>
         </li>
         <li class=" nk-drop-item">
-            <a href="forum.html">
-                Forum
+            <a href="">
+                Pages
                 
             </a><ul class="dropdown">
                         
         <li>
-            <a href="forum.html">
-                Forum
+            <a href="{% url 'games:create-company' %}">
+                Create Company
                 
             </a>
         </li>
         <li>
-            <a href="forum-topics.html">
-                Topics
+            <a href="{% url 'games:add-game-account' %}">
+                Add Game account
                 
             </a>
         </li>
         <li>
-            <a href="forum-single-topic.html">
-                Single Topic
-                
-            </a>
-        </li>
-                    </ul>
-        </li>
-        <li>
-            <a href="widgets.html">
-                Widgets
-                
-            </a>
-        </li>
-        <li>
-            <a href="coming-soon.html">
-                Coming Soon
-                
-            </a>
-        </li>
-        <li>
-            <a href="offline.html">
-                Offline
-                
-            </a>
-        </li>
-        <li>
-            <a href="404.html">
-                404
-                
-            </a>
-        </li>
-                    </ul>
-        </li>
-        <li class=" nk-drop-item">
-            <a href="blog-list.html">
-                Blog
-                
-            </a><ul class="dropdown">
-                        
-        <li>
-            <a href="news.html">
-                News
-                
-            </a>
-        </li>
-        <li class=" nk-drop-item">
-            <a href="blog-grid.html">
-                Blog With Sidebar
-                
-            </a><ul class="dropdown">
-                        
-        <li>
-            <a href="blog-grid.html">
-                Blog Grid
-                
-            </a>
-        </li>
-        <li>
-            <a href="blog-list.html">
-                Blog List
-                
-            </a>
-        </li>
-                    </ul>
-        </li>
-        <li>
-            <a href="blog-fullwidth.html">
-                Blog Fullwidth
+            <a href="{% url 'games:company-account' %}">
+                Show Company account
                 
             </a>
         </li>
         <li>
             <a href="blog-article.html">
-                Blog Article
+                 your adding game accounts
                 
             </a>
         </li>
                     </ul>
         </li>
-        <li>
-            <a href="gallery.html">
-                Gallery
-                
-            </a>
-        </li>
-        <li class=" nk-drop-item">
-            <a href="tournaments.html">
-                Tournaments
-                
-            </a><ul class="dropdown">
-                        
-        <li>
-            <a href="tournaments.html">
-                Tournament
-                
-            </a>
-        </li>
-        <li>
-            <a href="tournaments-teams.html">
-                Teams
-                
-            </a>
-        </li>
-        <li>
-            <a href="tournaments-teammate.html">
-                Teammate
-                
-            </a>
-        </li>
-                    </ul>
-        </li>
-        <li class=" nk-drop-item">
-            <a href="store.html">
-                Store
-                
-            </a><ul class="dropdown">
-                        
+ 
+       
         <li>
             <a href="store.html">
-                Store
+                About
                 
             </a>
+      
         </li>
+
         <li>
-            <a href="store-product.html">
-                Product
+            <a href="store.html">
+                Contact
                 
             </a>
-        </li>
-        <li>
-            <a href="store-catalog.html">
-                Catalog
-                
-            </a>
-        </li>
-        <li>
-            <a href="store-catalog-alt.html">
-                Catalog Alt
-                
-            </a>
-        </li>
-        <li>
-            <a href="store-checkout.html">
-                Checkout
-                
-            </a>
-        </li>
-        <li>
-            <a href="store-cart.html">
-                Cart
-                
-            </a>
-        </li>
-                    </ul>
+      
         </li>
                 </ul>
                 <ul class="nk-nav nk-nav-right nk-nav-icons">
@@ -875,57 +707,13 @@ ul li { display: inline-block; margin-right: 10px; }
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="nk-widget">
-                                <h4 class="nk-widget-title"><span class="text-main-1">Latest</span> Posts</h4>
-                                <div class="nk-widget-content">
-                                    <div class="row vertical-gap sm-gap">
-                                        
-                                        <div class="col-lg-6">
-                                            <div class="nk-widget-post-2">
-                                                <a href="blog-article.html" class="nk-post-image">
-                                                    <img src="{% static 'assets/images/post-1-sm.jpg' %}" alt="">
-                                                </a>
-                                                <div class="nk-post-title"><a href="blog-article.html">Smell magic in the air. Or maybe barbecue</a></div>
-                                                <div class="nk-post-date">
-                                                    <span class="fa fa-calendar"></span> Sep 18, 2018
-                                                    <span class="fa fa-comments"></span> <a href="#">4</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="col-lg-6">
-                                            <div class="nk-widget-post-2">
-                                                <a href="blog-article.html" class="nk-post-image">
-                                                    <img src="{% static 'assets/images/post-2-sm.jpg' %}" alt="">
-                                                </a>
-                                                <div class="nk-post-title"><a href="blog-article.html">Grab your sword and fight the Horde</a></div>
-                                                <div class="nk-post-date">
-                                                    <span class="fa fa-calendar"></span> Sep 5, 2018
-                                                    <span class="fa fa-comments"></span> <a href="#">7</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="nk-widget">
-                                <h4 class="nk-widget-title"><span class="text-main-1">In</span> Twitter</h4>
-                                <div class="nk-widget-content">
-                                    <div class="nk-twitter-list" data-twitter-count="1"></div>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                     <div class="nk-gap-3"></div>
                 </div>
             
                 <div class="nk-copyright">
                     <div class="container">
-                        <div class="nk-copyright-left">
-                            <a target="_blank" href="https://www.templateshub.net">Templates Hub</a>
-                        </div>
                         <div class="nk-copyright-right">
                             <ul class="nk-social-links-2">
                                 <li><a class="nk-social-rss" href="#"><span class="fa fa-rss"></span></a></li>
@@ -995,8 +783,8 @@ ul li { display: inline-block; margin-right: 10px; }
                             <h4 class="mb-0">Search</h4>
             
                             <div class="nk-gap-1"></div>
-                            <form action="#" class="nk-form nk-form-style-1">
-                                <input type="text" value="" name="search" class="form-control" placeholder="Type something and press Enter" autofocus>
+                            <form method="GET" class="nk-form nk-form-style-1">
+                                <input type="text" value="" name="search" class="form-control" placeholder="Type category name and press enter..." autofocus>
                             </form>
                         </div>
                     </div>

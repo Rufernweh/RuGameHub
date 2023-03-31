@@ -48,7 +48,18 @@ INSTALLED_APPS = [
     'mptt',
     'ckeditor',
     'phonenumber_field',
+    'django_crontab',
 ]
+
+CRONJOBS = [
+    ('0 0 * * *', 'games.tasks.update_game_status', '> /dev/null 2>&1'),
+]
+
+BROKER_URL = 'amqp://guest:guest@localhost:8000//'
+
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

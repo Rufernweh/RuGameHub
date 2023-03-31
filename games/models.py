@@ -8,6 +8,9 @@ from services.uploader import Uploader
 from services.slugify import slugify
 from services.generator import CodeGenerator
 from companies.models import Company
+from phonenumber_field.modelfields import PhoneNumberField
+from django.utils import timezone
+
 # Create your models here.
 
 User=get_user_model()
@@ -43,8 +46,10 @@ class GameAccount(DateMixin,SlugMixin):
     type=models.CharField(max_length=50,choices=GAME_STATUS,blank=True,null=True)
     description=RichTextField()
     price=models.PositiveIntegerField()
-    
+    mobile=PhoneNumberField(blank=True,null=True)
+    is_active=models.BooleanField(default=True)
 
+    
 
     def __str__(self):
         return self.name
@@ -53,6 +58,9 @@ class GameAccount(DateMixin,SlugMixin):
         ordering=('-created_at',)
         verbose_name='Game Account'
         verbose_name_plural='Game Accounts'
+
+    
+
 
     def save(self,*args,**kwargs):
         self.code=CodeGenerator.create_slug_shortcode(

@@ -20,3 +20,9 @@ class GameAccountAdmin(admin.ModelAdmin):
     search_fields = ("name", "code",'price')
 
 admin.site.register(GameAccount,GameAccountAdmin)
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "parent", "slug", "code")
+    search_fields = ("name", "code")
+
+admin.site.register(GameAccountGallery,)

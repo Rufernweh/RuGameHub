@@ -16,7 +16,6 @@ class Company(DateMixin,SlugMixin):
     name=models.CharField(max_length=50,blank=True,null=True)
     icon=models.ImageField(upload_to=Uploader.upload_logo_game_company,blank=True,null=True)
     bio=RichTextField(blank=True,null=True)
-    mobile=PhoneNumberField()
     VIP_status=models.CharField(max_length=40,choices=PREMIUM_ACCOUNT,blank=True,null=True)
     max_account_count=10
 

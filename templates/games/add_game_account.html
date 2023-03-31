@@ -106,6 +106,21 @@
 
           </div>
 
+
+          <div class="field field_v2">
+            <label for="mobile" class='form-label'> <span class="required" style="color: tomato;">*</span></label>
+            <input
+              name="mobile"
+              class="field__input"
+              placeholder="Please enter the phone number"
+              maxlength="20"
+            />
+            <span class="field__label-wrap" aria-hidden="true">
+              <span class="field__label">{{form.mobile.label}}</span>
+            </span>
+          </div>
+
+
           <div class="field field_v2">
             <label for="type" class='form-label'> <span class="required" style="color: tomato;">*</span></label>
             {{form.type}}
