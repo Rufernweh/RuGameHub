@@ -11,15 +11,18 @@ from django.db.models import F,Q
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from django.db.models import When,Case,Value
+from contacts.forms import ContactForm
+import json
+import ast
 
 # Create your views here.
 
 def index_view(request):
+    
+
     search = request.GET.get('search')
     if search:
-        #***************************************************
-        # bura list seyfesini qoyacaqsan asagidaki mirtadi
-        url = '/your-game-accounts/?search=' + search
+        url = '/game-accounts-list/?search=' + search
         return redirect(url)
     
 
@@ -123,17 +126,25 @@ def add_game_account(request):
 
 @not_created_company
 def user_game_accounts(request):
-    search=request.GET.get('search')
-    print(search)
-    query=request.GET.get('q')
+    filter=''
     context={}
+    search=request.GET.get('search')
+    filter_cat=request.GET.get('query')
+    
     company=Company.objects.get(user=request.user)
     gameacc=GameAccount.objects.filter(company=company)
-    if query:
-        gameacc=gameacc.filter(name__icontains=query)
+  
+    if search or  filter_cat:
+        if filter_cat:
+            search=filter_cat
+        gameacc=gameacc.filter(category__name__exact=search)
+
+        context['filter'] =f'&query={search}'
+
+
     latest_games=gameacc.order_by('-created_at')[:3]
     #Pagination
-    paginator=Paginator(gameacc,3)
+    paginator=Paginator(gameacc,1)
     page=request.GET.get('page',1)
     gameacc_list=paginator.get_page(page)
    
@@ -142,9 +153,67 @@ def user_game_accounts(request):
     context['paginator'] = paginator
     context['gameaccs'] = gameacc_list
     context['latest_games'] = latest_games
+
     return render(request,'games/self_game_accounts.html',context)
 
 
 
 def list_view(request):
-    return render(request,"games/list.html",{})
+    context={}
+    filter={}
+    query=request.GET.get('search')
+    filter_cat=request.GET.get('query')
+    cat=request.GET.get('category')
+   
+    gameaccs=GameAccount.objects.all()
+    latest_games=gameaccs.order_by('-created_at')[:3]
+    random_gameaccs = gameaccs.order_by('?')[:4]
+
+
+    if not filter_cat:
+        filter_cat={}
+    else:
+        filter_cat=ast.literal_eval(filter_cat)
+
+
+    if query or filter_cat.get('search'):
+        if filter_cat.get('search'):
+            query=filter_cat.get('search')
+
+        gameaccs=gameaccs.filter(category__name__icontains=query)
+        filter['search']=query
+        context['filter']=f'&query={filter}'
+
+    
+
+    elif cat or filter_cat.get('cat'):
+    
+        print(filter_cat.get('cat'))
+        if filter_cat.get('cat'):
+            cat=filter_cat.get('cat')
+            
+        gameaccs=gameaccs.filter(category__name__icontains=cat)
+        filter['cat']=cat
+        context['filter']=f'&query={filter}'
+
+
+
+    paginator=Paginator(gameaccs,1)
+    page=request.GET.get('page',1)
+    gameaccs_list=paginator.get_page(page)
+    
+   
+
+    if not  request.user.is_anonymous and  Company.objects.filter(user=request.user):
+        context['company']=Company.objects.get(user=request.user)
+        context['user']=request.user
+
+
+         
+    context['user']=''
+    context['gameaccs']=gameaccs_list
+    context['random_gameaccs']=random_gameaccs
+    context['latest_games']=latest_games
+    context['paginator']=paginator
+
+    return render(request,"games/list.html",context)

@@ -80,7 +80,7 @@
                     class="rounded-circle"
                     width="35"
                   />
-                  by <a href="#">{{gameacc.company.name}}</a> {{gameacc.created_at}}
+                  by <a href="#">{{gameacc.company.name}}</a>{{gameacc.created_at| date:'Y-m-d' }}
                 </div>
                 <div class="nk-gap"></div>
                 <div class="nk-post-text">
@@ -105,18 +105,18 @@
           {% if paginator.num_pages > 1  %}
           <div class="nk-pagination nk-pagination-center">
             {% if gameaccs.has_previous %}
-            <a href="?page={{gameaccs.previous_page.number}}" class="nk-pagination-prev">
+            <a href="?page={{gameaccs.previous_page_number}}{{filter}}" class="nk-pagination-prev">
               <span class="ion-ios-arrow-back"></span>
             </a>
             {% endif %}
             
             <nav>
               {% for i in paginator.page_range  %}
-              <a class="{% if gameaccs.number == i %}nk-pagination-current{% endif %}" href="?page={{i}}">{{i}}</a>
+              <a class="{% if gameaccs.number == i %}nk-pagination-current{% endif %}" href="?page={{i}}{{filter}}">{{i}}</a>
               {% endfor %}
             </nav>
             {% if  gameaccs.has_next %}
-            <a href="?page={{gameaccs.has_next_page_number}}" class="nk-pagination-next">
+            <a href="?page={{gameaccs.next_page_number}}{{filter}}" class="nk-pagination-next">
               <span class="ion-ios-arrow-forward"></span>
             </a>
             {% endif %}
@@ -143,17 +143,7 @@
                 class="nk-form nk-form-style-1"
                 novalidate="novalidate"
               >
-                <div class="input-group">
-                  <input
-                    name='q'
-                    type="text"
-                    class="form-control"
-                    placeholder="Game name..."
-                  />
-                  <button class="nk-btn nk-btn-color-main-1">
-                    <span class="ion-search"></span>
-                  </button>
-                </div>
+               
               </form>
             </div>
           </div>
