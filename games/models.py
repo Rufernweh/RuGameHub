@@ -79,8 +79,23 @@ class GameAccountGallery(DateMixin):
         return self.game.name
 
     class Meta:
-        ordering=('-created_at',)
+        ordering=('created_at',)
         verbose_name='Game Account Gallery'
         verbose_name_plural='Game Accounts Galleries'
 
   
+
+class Review(DateMixin):
+    user=models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
+    name=models.CharField(max_length=50)
+    message=models.TextField()
+
+
+
+    def __str__(self):
+        return f"{self.name} - {self.message[:20]}"
+
+    class Meta:
+        ordering=('-created_at',)
+        verbose_name='Review'
+        verbose_name_plural='Reviews'

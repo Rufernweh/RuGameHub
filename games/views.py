@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from users.decorators import not_created_company
 from django.http import JsonResponse
 from .forms import GameAccountForm,CreateCompanyForm,CompanyAccountForm
-from .models import GameAccount,Category
+from .models import GameAccount,Category,Review
 from companies.models import Company
 from django.db.models import F,Q
 from django.core.exceptions import ObjectDoesNotExist
@@ -14,6 +14,9 @@ from django.db.models import When,Case,Value
 from contacts.forms import ContactForm
 import json
 import ast
+from services.choices import GAME_STATUS
+from django.template.loader import render_to_string
+
 
 # Create your views here.
 
@@ -41,9 +44,9 @@ def index_view(request):
     context['user']=''
     context['gameaccs']=gameaccs
     context['latest_games']=latest_games
+    context['category']=Category.objects.all()
     if not  request.user.is_anonymous and  Company.objects.filter(user=request.user):
         context['company']=Company.objects.get(user=request.user)
-        context['category']=Category.objects.all()
         context['user']=request.user
     return render(request,'games/index.html',context)
 
@@ -160,16 +163,19 @@ def user_game_accounts(request):
 
 def list_view(request):
     context={}
-    filter={}
+    filter_dict={}
     query=request.GET.get('search')
     filter_cat=request.GET.get('query')
     cat=request.GET.get('category')
+    type=request.GET.get('type')
    
     gameaccs=GameAccount.objects.all()
     latest_games=gameaccs.order_by('-created_at')[:3]
     random_gameaccs = gameaccs.order_by('?')[:4]
 
 
+
+    
     if not filter_cat:
         filter_cat={}
     else:
@@ -181,8 +187,8 @@ def list_view(request):
             query=filter_cat.get('search')
 
         gameaccs=gameaccs.filter(category__name__icontains=query)
-        filter['search']=query
-        context['filter']=f'&query={filter}'
+        filter_dict['search']=query
+        context['filter']=f'&query={filter_dict}'
 
     
 
@@ -193,9 +199,18 @@ def list_view(request):
             cat=filter_cat.get('cat')
             
         gameaccs=gameaccs.filter(category__name__icontains=cat)
-        filter['cat']=cat
-        context['filter']=f'&query={filter}'
+        filter_dict['cat']=cat
+        context['filter']=f'&query={filter_dict}'
 
+
+    elif type or filter_cat.get('type'):
+        if filter_cat.get('type'):
+            type=filter_cat.get('type')
+
+        gameaccs=gameaccs.filter(type=type)
+        print(gameaccs)
+        filter_dict['type']=type
+        context['filter']=f'&query={filter_dict}'
 
 
     paginator=Paginator(gameaccs,1)
@@ -206,14 +221,79 @@ def list_view(request):
 
     if not  request.user.is_anonymous and  Company.objects.filter(user=request.user):
         context['company']=Company.objects.get(user=request.user)
-        context['user']=request.user
 
 
          
-    context['user']=''
     context['gameaccs']=gameaccs_list
     context['random_gameaccs']=random_gameaccs
     context['latest_games']=latest_games
     context['paginator']=paginator
 
     return render(request,"games/list.html",context)
+
+
+def detail_view(request,code):
+    gameaccss = GameAccount.objects.annotate(type_color=Case(When(type='MOBA',then=Value('#1464d2')),
+        When(type='FPS',then=Value('#a714b9')),
+        When(type='Racing',then=Value('#ef9e2b')),
+        When(type='RPG',then=Value('#2bef46')),
+        When(type='Simulation and sports',then=Value('#ef2beb')),
+        ))
+    gameacc=gameaccss.get(code=code)
+    related_games=gameaccss.filter(type=gameacc.type)
+    random_gameaccs = gameaccss.order_by('?')[:4]
+    reviews=Review.objects.all()
+    context={}
+    context['types']=GAME_STATUS
+    context['gameacc']=gameacc
+    context['related_games']=related_games
+    context['random_accs']=random_gameaccs
+    context['reviews']=reviews
+
+
+    if not  request.user.is_anonymous and  Company.objects.filter(user=request.user):
+        context['company']=Company.objects.get(user=request.user)
+
+
+    
+
+    return render(request,'games/detail.html',context)
+
+
+
+def add_comment(request):
+
+    if request.method == 'POST':
+        company=Company.objects.get(user=request.user)
+        message = request.POST.get('message')
+        review = Review.objects.create(name=request.user.full_name, message=message,user=request.user)
+        
+
+        # Get all reviews, including the newly added one
+        reviews = Review.objects.all()
+
+        # Render the reviews list template with the updated reviews
+        reviews_html = render_to_string('games/detail.html', {'reviews': reviews})
+
+        data = {
+            'success': True,
+            'name': review.name,
+            'message': review.message,
+            'date': review.created_at.strftime('%D %B, %Y'),
+            'reviews_html': reviews_html,
+            'img':company.icon.url,
+        }
+        return JsonResponse(data)
+    else:
+        return JsonResponse({'success': False})
+    
+
+def check_login_status(request):
+    if request.user.is_authenticated:
+        logged_in = True
+    else:
+        logged_in = False
+
+    # Yanıtı JSON formatında döndür
+    response_data = {'logged_in': logged_in}
+    return JsonResponse(response_data)

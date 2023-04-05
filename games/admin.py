@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import GameAccount,GameAccountGallery,Category
+from .models import GameAccount,GameAccountGallery,Category,Review
 
 # Register your models here.
 
@@ -26,3 +26,10 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ("name", "code")
 
 admin.site.register(GameAccountGallery,)
+
+
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ("name", "message")
+
+
+admin.site.register(Review,ReviewAdmin)

@@ -71,7 +71,7 @@
                     <div class="col-md-6">
                         <!-- START: Post -->
                         <div class="nk-blog-post">
-                            <a href="blog-article.html" class="nk-post-img">
+                            <a href="{% url 'games:game-account-detail' gameacc.code %}" class="nk-post-img">
                                 <img 
                                 style="width: 335px; height: 220px;"
                                 src="{{gameacc.gameaccountgallery_set.first.image.url}}" >
@@ -80,7 +80,7 @@
                             <div class="nk-gap"></div>
                             <h2 class="nk-post-title h4"><a href="blog-article.html">{{gameacc.name}}</a></h2>
                             <div class="nk-post-by">
-                                <img src="{{gameacc.company.icon.url}}"  class="rounded-circle" width="35"> by <a href="#">{{gameacc.company.name}}</a> {{gameacc.created_at| date:'Y-m-d' }}
+                                <img src="{{gameacc.company.icon.url}}"  class="rounded-circle" width="35"> by <a href="{% url 'games:game-account-detail' '{{gameacc.code}}' %}">{{gameacc.company.name}}</a> {{gameacc.created_at| date:'Y-m-d' }}
                             </div>
                             <div class="nk-gap"></div>
                             <div class="nk-post-text">
@@ -134,6 +134,10 @@
                 <div class="nk-widget">
   
 </div>
+
+
+
+
 <div class="nk-widget nk-widget-highlighted">
     <h4 class="nk-widget-title"><span><span class="text-main-1">We</span> Are Social</span></h4>
     <div class="nk-widget-content">
