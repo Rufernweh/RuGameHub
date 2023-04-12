@@ -1,11 +1,12 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from users.decorators import not_created_company
 from django.http import JsonResponse
-from .forms import GameAccountForm,CreateCompanyForm,CompanyAccountForm
-from .models import GameAccount,Category,Review
+from .forms import GameAccountForm,CreateCompanyForm,CompanyAccountForm,EditGameAccountForm
+from .models import GameAccount,GameAccountGallery,Category,Review
+from basket.models import Basket
 from companies.models import Company
 from django.db.models import F,Q
 from django.core.exceptions import ObjectDoesNotExist
@@ -16,6 +17,7 @@ import json
 import ast
 from services.choices import GAME_STATUS
 from django.template.loader import render_to_string
+from django.contrib import messages
 
 
 # Create your views here.
@@ -41,13 +43,10 @@ def index_view(request):
     latest_games=gameaccss.order_by('-created_at')[:3]
     
     context={}
-    context['user']=''
     context['gameaccs']=gameaccs
     context['latest_games']=latest_games
     context['category']=Category.objects.all()
-    if not  request.user.is_anonymous and  Company.objects.filter(user=request.user):
-        context['company']=Company.objects.get(user=request.user)
-        context['user']=request.user
+  
     return render(request,'games/index.html',context)
 
     
@@ -59,8 +58,7 @@ def create_company(request):
 
     if request.method == 'POST':
         context['form']=CreateCompanyForm(data=request.POST,files=request.FILES,user=request.user)
-        if Company.objects.filter(user=request.user):
-            context['company']=Company.objects.get(user=request.user)
+        
         form = CreateCompanyForm(data=request.POST,files=request.FILES,user=request.user)
         if form.is_valid():
             form.save()
@@ -71,8 +69,7 @@ def create_company(request):
     else:
         if request.GET.get('next'):
             return redirect('users:login')
-        if Company.objects.filter(user=request.user):
-            context['company']=Company.objects.get(user=request.user)
+       
         context['form']=CreateCompanyForm(user=request.user)
     return render(request, 'users/create_company.html', context)
 
@@ -92,6 +89,7 @@ def company_account(request):
     context['check_icon']=check_icon
    
     
+
 
     if request.method == 'POST':
         form=CompanyAccountForm(data=request.POST,instance=company,user=request.user,files=request.FILES)
@@ -118,7 +116,9 @@ def add_game_account(request):
     
         form = GameAccountForm(user=request.user,data=request.POST,files=request.FILES)
         if form.is_valid():
-            form.save()
+            form.save(commit=False)
+            message='Game account successfully added'
+            return render(request, 'games/add_game_account.html', {f'form':GameAccountForm(user=request.user),'company':company,'messages':message})
             
         else:
             return render(request, 'games/add_game_account.html', {'form': form})
@@ -136,6 +136,8 @@ def user_game_accounts(request):
     
     company=Company.objects.get(user=request.user)
     gameacc=GameAccount.objects.filter(company=company)
+
+
   
     if search or  filter_cat:
         if filter_cat:
@@ -152,7 +154,6 @@ def user_game_accounts(request):
     gameacc_list=paginator.get_page(page)
    
   
-    context['company'] = company
     context['paginator'] = paginator
     context['gameaccs'] = gameacc_list
     context['latest_games'] = latest_games
@@ -219,8 +220,6 @@ def list_view(request):
     
    
 
-    if not  request.user.is_anonymous and  Company.objects.filter(user=request.user):
-        context['company']=Company.objects.get(user=request.user)
 
 
          
@@ -249,10 +248,8 @@ def detail_view(request,code):
     context['related_games']=related_games
     context['random_accs']=random_gameaccs
     context['reviews']=reviews
+    context['basket']=Basket.objects.all()
 
-
-    if not  request.user.is_anonymous and  Company.objects.filter(user=request.user):
-        context['company']=Company.objects.get(user=request.user)
 
 
     
@@ -279,7 +276,7 @@ def add_comment(request):
             'success': True,
             'name': review.name,
             'message': review.message,
-            'date': review.created_at.strftime('%D %B, %Y'),
+            'created_date': review.created_at.strftime('%D, %B, %Y'),
             'reviews_html': reviews_html,
             'img':company.icon.url,
         }
@@ -297,3 +294,96 @@ def check_login_status(request):
     # Yanıtı JSON formatında döndür
     response_data = {'logged_in': logged_in}
     return JsonResponse(response_data)
+
+
+
+
+
+
+def remove_gameacc(request):
+    if request.method == 'POST':
+       
+        product_id = request.POST.get('product_id')
+        try:
+            basket = Basket.objects.get(user=request.user, gameacc__id=product_id)
+            basket.delete()
+            return JsonResponse({'success': True})
+        except Basket.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Sepetinizde bu ürün bulunamadı.'})
+    else:
+        return JsonResponse({'success': False, 'error': 'Geçersiz istek.'})
+    
+
+@not_created_company
+def edit_adding_account(request,code):
+    context={}
+    company=Company.objects.get(user=request.user)
+   
+    removed_acc=request.GET.get('removed-acc')
+
+    if removed_acc:
+        GameAccount.objects.filter(code=removed_acc).delete()
+        return redirect('games:user-game-accounts')
+         
+       
+    
+    if GameAccount.objects.filter(code=code,company=company):
+        gameacc=GameAccount.objects.get(code=code,company=company)
+        form=EditGameAccountForm(instance=gameacc,user=request.user,gameacc=gameacc,remove_img_list=[])
+        images=gameacc.gameaccountgallery_set.all()
+        
+
+        if request.method == "POST":
+            remove_img_list=request.POST.getlist('remove_image_list')
+            form=EditGameAccountForm(data=request.POST,instance=gameacc,user=request.user,gameacc=gameacc,files=request.FILES,remove_img_list=remove_img_list)
+            if form.is_valid():
+                gameacc=form.save()
+                
+                code=form.instance.code
+                response = redirect('games:edit-game-account', code=code)
+                if form.cleaned_data.get('exists') == True:
+                    message='Successfully update game account'
+                    messages.add_message(request, messages.INFO, message)
+                return response
+        
+                
+                
+
+
+        
+    else:
+        return redirect('games:index')
+    
+    context['form']=form
+    context['images']=images
+    context['code']=code
+    context['gameacc']=gameacc
+
+
+
+    return render(request,'games/edit_adding_account.html',context)
+
+
+
+
+
+def remove_comment(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        comment_id = data.get('comment_id')
+        review = get_object_or_404(Review, id=comment_id)
+        review.delete()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+
+def remove_game_account(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        gameacc_id = data.get('Gameacc_id')
+        object = get_object_or_404(GameAccount, id=gameacc_id)
+        object.delete()
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})

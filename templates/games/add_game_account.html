@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
 
 <!--
     START: Navbar Mobile
@@ -57,14 +56,23 @@
       <div class="errorlist">
         {% if field.errors %}
         {% for error in field.errors %}
+
+          {% if error %}{% endif %}
           <li >{{ error }}</li>
         {% endfor %}
         {% endif %}
       
       
       </div>
+
       {% endif %}
       {% endfor %}
+      {% if messages %}
+      <div  class="success-message">
+        <i class="fas fa-check-circle"></i>
+        <span>{{messages}}</span>
+      </div>
+      {% endif %}
       
 
         
@@ -97,23 +105,19 @@
 
 
          
-          <div class="field field_v2">
-            <label for="company" class='form-label'> <span class="required" style="color: tomato;">*</span></label>
-            {{form.company}}
-            <span class="field__label-wrap" aria-hidden="true">
-             </span>
-            </span>
-
-          </div>
+          
 
 
-          <div class="field field_v2">
+          <div class="field field_v1">
             <label for="mobile" class='form-label'> <span class="required" style="color: tomato;">*</span></label>
             <input
               name="mobile"
+              id='mobile'
               class="field__input"
-              placeholder="Please enter the phone number"
-              maxlength="20"
+              placeholder="+994508997776..."
+              
+              style='color:white;'
+              maxlength="13"
             />
             <span class="field__label-wrap" aria-hidden="true">
               <span class="field__label">{{form.mobile.label}}</span>
@@ -151,6 +155,7 @@
             </span>
 
           </div>
+          
           
           
          

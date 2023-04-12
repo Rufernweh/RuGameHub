@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'companies',
     'contacts',
+    'basket',
 
 
     #thirdy paty apps
@@ -83,6 +84,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'core.context_processors.my_context_processor',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',

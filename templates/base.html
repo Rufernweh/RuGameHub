@@ -439,14 +439,14 @@ ul li { display: inline-block; margin-right: 10px; }
       #image-preview-container li button {
         height: max-content;
         position: absolute;
-        top: -15px;
+        top: -10px;
         right: 20px;
         padding: 5px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         background: none;
-        color: rgb(203, 77, 77);
+        color:white;
         }
         .inputWrapper {
         height: 30px;
@@ -552,10 +552,35 @@ ul li { display: inline-block; margin-right: 10px; }
           animation-name: zoom;
           animation-duration: 0.6s;
 
+          
+          .close-icon {
+            margin-right: -10px;
+         }
+
+      
 
        
     </style>
     
+
+    <style>
+      .success-message {
+        background-color: #c7f0c1;
+        border: 1px solid #6cbf68;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+        color: #478e38;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        transition: border 0.2s ease-in-out;
+      }
+      
+      .success-message:hover {
+        border: 1px solid #478e38;
+      }
+    </style>
       
     
     
@@ -636,7 +661,35 @@ ul li { display: inline-block; margin-right: 10px; }
                 
                 
                 
-                
+                <li>
+                  <span class="nk-cart-toggle">
+                      <svg class="svg-inline--fa fa-shopping-cart fa-w-18" aria-hidden="true" data-prefix="fa" data-icon="shopping-cart" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" data-fa-i2svg=""><path fill="currentColor" d="M528.12 301.319l47.273-208C578.806 78.301 567.391 64 551.99 64H159.208l-9.166-44.81C147.758 8.021 137.93 0 126.529 0H24C10.745 0 0 10.745 0 24v16c0 13.255 10.745 24 24 24h69.883l70.248 343.435C147.325 417.1 136 435.222 136 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-15.674-6.447-29.835-16.824-40h209.647C430.447 426.165 424 440.326 424 456c0 30.928 25.072 56 56 56s56-25.072 56-56c0-22.172-12.888-41.332-31.579-50.405l5.517-24.276c3.413-15.018-8.002-29.319-23.403-29.319H218.117l-6.545-32h293.145c11.206 0 20.92-7.754 23.403-18.681z"></path></svg><!-- <span class="fa fa-shopping-cart"></span> -->
+                      <span class="nk-badge">27</span>
+                  </span>
+                  <div class="nk-cart-dropdown">
+                      {% for gameacc_basket in basket %}
+                      <div class="nk-widget-post">
+                          <a href="store-product.html" class="nk-post-image">
+                              <img src="{{gameacc_basket.gameacc.gameaccountgallery_set.first.image.url}}" alt="In all revolutions of">
+                          </a>
+                          
+                          <h3 class="nk-post-title">
+                              <a href="#" class="nk-cart-remove-item"  onclick="removeProduct(this, {{ gameacc_basket.gameacc.id }})"><span class="ion-android-close"></span></a>
+                              <a href="store-product.html">{{gameacc_basket.gameacc.name}}</a>
+                          </h3>
+                          <div class="nk-gap-1"></div>
+                          <div class="nk-product-price">{{gameacc_basket.gameacc.price}} AZN</div>
+                      </div>
+                      {% endfor %}
+                      
+                   
+                      
+                      <div class="nk-gap-2"></div>
+                      <div class="text-center">
+                          <a href="store-checkout.html" class="nk-btn nk-btn-rounded nk-btn-color-main-1 nk-btn-hover-color-white">Proceed to Checkout</a>
+                      </div>
+                  </div>
+              </li>
             
                 
 
@@ -686,7 +739,7 @@ ul li { display: inline-block; margin-right: 10px; }
             </a><ul class="dropdown">
                         
         <li>
-            <a href="{% url 'games:create-company' %}">
+            <a href=" {% if company %}{% url 'games:company-account' %}{% else %}{% url 'games:create-company' %}{% endif %}">
                 Create Company
                 
             </a>
@@ -704,7 +757,7 @@ ul li { display: inline-block; margin-right: 10px; }
             </a>
         </li>
         <li>
-            <a href="blog-article.html">
+            <a href="{% url 'games:user-game-accounts' %}">
                  your adding game accounts
                 
             </a>
@@ -884,7 +937,7 @@ ul li { display: inline-block; margin-right: 10px; }
                             <div class="text-center">
                                 <h4 class="mb-0"><span class="text-main-1">Login</span> / Register</h4>
                                
-                                <a href="{% url 'users:profile' %}" style="position: relative; top: -40px; left: -130px; right: 110px; border-radius: 5px; box-shadow: 0 0 5px rgb(255, 255, 255); transition: transform 0.2s ease-in-out; background-color: transparent; color: white;">{% if user %} Profile {% endif %}</a>
+                                <a href="{% url 'users:profile' %}" style="position: relative; top: -40px; left: -130px; right: 110px; border-radius: 5px; box-shadow: 0 0 5px rgb(255, 255, 255); transition: transform 0.2s ease-in-out; background-color: transparent; color: white;">{% if user %} Profile {% else %} {% endif %}</a>
                             
                                 <p>{{user.email}}</p>
                                 <form action="#" class="nk-form text-white">
@@ -1099,7 +1152,7 @@ $(document).ready(function() {
               dataType: 'json',
               success: function(response) {
                 if (response.success) {
-                  var commentHtml = '<div class="nk-comment"><div class="nk-comment-meta"><img src="' + response.img + '" alt="Witch Murder" class="rounded-circle" width="35"> by <a href="#">' + response.name + '</a> in ' + response.date + '</div><div class="nk-comment-text"><p>' + response.message + '</p></div></div>';
+                  var commentHtml = '<div class="nk-comment"><div class="nk-comment-meta"><img src="' + response.img + '" alt="Witch Murder" class="rounded-circle" width="35"> by <a href="#">' + response.name + '</a> in ' + response.created_date + '</div><div class="nk-comment-text"><p>' + response.message + '</p></div></div>';
                   $('.nk-comments').prepend(commentHtml);
                   form.trigger('reset');
                 }
@@ -1125,6 +1178,113 @@ function validateForm() {
 }
 
 
+
+function removeProduct(element, product_id) {
+  $.ajax({
+    type: 'POST',
+    url: "{% url 'basket:remove-gameacc' %}",
+    data: {
+      'product_id': product_id,
+      'csrfmiddlewaretoken': '{{ csrf_token }}'
+    },
+    success: function(response) {
+      if (response.success) {
+        element.parentNode.parentNode.remove(); // div elementini kaldır
+        $('.nk-store-cart-totals-subtotal td:last').text(response.total_price + ' AZN');
+        $('.nk-store-cart-totals-total td:last').text(response.total_price + ' AZN');
+      } else {
+        alert(response.error);
+      }
+    },
+    error: function() {
+      alert('Bir hata oluştu');
+    }
+  });
+}
+
+
+
+
+$(".remove-icon").click(function() {
+  // data özniteliğinden resim kimliğini al
+  var image_id = $(this).data("image-id");
+  // tıklanan ikonun üst öğesini DOM'dan kaldır
+  $(this).parent().remove();
+  // kaldırılan resim kimliğini remove_image_list giriş alanına ekle
+  var remove_image_list = $("#remove_image_list");
+  remove_image_list.val(remove_image_list.val() + image_id + ",");
+});    
+      // Function to get CSRF token from cookies
+      function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i].trim();
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+
+
+
+
+      function removeComment(commentId) {
+        if (confirm('Are you sure you want to delete this comment?')) {
+          fetch('{% url 'games:remove-comment' %}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({'comment_id': commentId}),
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // remove the comment from the DOM
+                const commentElement = document.querySelector(`.nk-comment[data-comment-id="${commentId}"]`);
+                commentElement.parentNode.removeChild(commentElement);
+              } else {
+                alert('Error occurred while deleting the comment.');
+              }
+            })
+            .catch(error => console.error(error));
+        }
+      }
+
+
+
+
+
+      function deleteAccount(Gameacc_id) {
+        if (confirm('Are you sure you want to delete your account?')) {
+          fetch('{% url 'games:remove-game-account' %}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}',
+            },
+            body: JSON.stringify({
+              'Gameacc_id':Gameacc_id
+            }),
+          })
+            .then(response => response.json())
+            .then(data => {
+              if (data.success) {
+                // Account deleted successfully, redirect to home page
+                window.location.href = '/';
+              } else {
+                alert('Error occurred while deleting the account.');
+              }
+            })
+            .catch(error => console.error(error));
+        }
+      }
 </script>
              
                 

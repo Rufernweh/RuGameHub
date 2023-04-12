@@ -318,6 +318,7 @@
         display: flex;
       }
       
+     
       
 
     </style>
@@ -344,6 +345,10 @@
             
             <form method="POST" enctype="multipart/form-data">
               {% csrf_token %}
+              <a style='left: -40px; position: relative; top: -19px;' href="{% url 'games:index' %}" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                <span>Home</span>
+              </a>
               
               <h2>Company Account</h2>
               <div class="profile-pic">
@@ -369,7 +374,8 @@
               
               {{form.name}}
               {{form.bio.label}}
-              {{form.bio}}
+              <input type="text"  name='bio' value="{{form.bio.value|striptags}}" >
+              
               
               {% for field in form %}
               {% if field.errors %}
@@ -393,22 +399,19 @@
 
             <div style="float: left;">
               <button type="submit" name="login_submit" style="
-                  background-image: linear-gradient(to right, #5c5cf6 0%, #3c63ef 100%);
-                  border-radius: 5px;
-                  color: #fff;
-                  padding: 10px 20px;
-                  border: none;
-                ">
+                background-image: linear-gradient(to right, #5c5cf6 0%, #3c63ef 100%);
+                border-radius: 5px;
+                color: #fff;
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+                transition: all 0.3s ease-in-out; /* Hover efekti için */
+              ">
                 Update Profile
               </button>
             </div>
         
-            <div style="float: right;">
-              <a href="{% url 'games:index' %}" class="back-button">
-                <i class="fas fa-arrow-left"></i>
-                <span>Home</span>
-              </a>
-            </div>
             
             </form>
           </div>

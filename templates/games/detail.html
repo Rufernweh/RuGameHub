@@ -110,8 +110,9 @@
                             <div class="nk-product-price">{{gameacc.price}} AZN</div>
                             <div class="nk-gap-1"></div>
                             <div class="input-group">
-                                <button class="nk-btn nk-btn-rounded nk-btn-color-main-1">Add to Cart</button>
+                                <a href="{% url 'basket:basket' %}?gameacc={{gameacc}}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">Add to Cart</a>
                             </div>
+                            <div style=' margin-top: 30px; font-size: 1.2em; font-weight: bold;'><a style="color: aliceblue;" >Mobile Number:</a> {{gameacc.mobile}}</div>
                         </form>
                         <div class="nk-gap-3"></div>
                         <!-- END: Add to Cart -->
@@ -189,16 +190,18 @@
                             <div class="nk-gap-2"></div>
                             <div class="nk-comments">
                                 {% for review in reviews %}
-                                <div class="nk-comment">
-                                    <div class="nk-comment-meta">
-                                        <img src="{{review.user.company.icon.url}}" alt="Witch Murder" class="rounded-circle" width="35"> by <a href="#">{{ review.name }}</a> in {{ review.date }}
+                                    <div data-comment-id="{{ review.id }}" class="nk-comment">
+                                        <div class="nk-comment-meta">
+                                            <img src="{{ review.user.company.icon.url }}" alt="Witch Murder" class="rounded-circle" width="35"> by <a href="#">{{ review.name }}</a> in {{ review.created_at|date:'m/d/y F Y' }}
+                                            <a  style='cursor:pointer;' onclick="removeComment({{ review.id }})"><i  style='color:red;' class="fa fa-trash"></i></a>
+                                        </div>
+                                        <div class="nk-comment-text">
+                                            <p>{{ review.message }}</p>
+                                        </div>
                                     </div>
-                                    <div class="nk-comment-text">
-                                        <p>{{ review.message }}</p>
-                                    </div>
-                                </div>
                                 {% endfor %}
                             </div>
+                            
                         </div>
                         
                         <!-- END: Tab Reviews -->

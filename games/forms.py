@@ -7,6 +7,7 @@ from phonenumbers import parse, is_valid_number, NumberParseException
 from django.core.validators import RegexValidator, ValidationError
 from django.forms.widgets import ClearableFileInput
 from PIL import Image
+from django.utils.safestring import mark_safe
 
 
 
@@ -15,7 +16,7 @@ from PIL import Image
 
 class GameAccountForm(forms.ModelForm):
     image=forms.FileField()
-    mobile=forms.CharField(max_length=15)
+    mobile=forms.CharField(max_length=13,widget=forms.TextInput(attrs={'placeholder':'Mobile'}))
     class Meta:
         model = GameAccount
         fields = '__all__'
@@ -24,13 +25,12 @@ class GameAccountForm(forms.ModelForm):
     def __init__(self,user, *args, **kwargs):
         self.user=user
         super().__init__(*args, **kwargs)
-        self.fields['company'].queryset = Company.objects.filter(user=user)
-        self.fields['company'].empty_label='-------Company'
         self.fields['category'].empty_label='-------Category'
         self.fields['type'].empty_label='-------Type'
         self.fields['description'].widget.attrs.update({'placeholder':'Description'})
         for field_name, field in self.fields.items():
             field.required = False
+            field.errors=False
 
         for field in self.fields:
             self.fields[field].widget.attrs.update({
@@ -41,11 +41,10 @@ class GameAccountForm(forms.ModelForm):
             
 
     def clean(self):
-        company=self.cleaned_data.get('company')
+        company=Company.objects.get(user=self.user)
         name=self.cleaned_data.get('name')
         description=self.cleaned_data.get('description')
         price=self.cleaned_data.get('price')
-        company=self.cleaned_data.get('company')
         category=self.cleaned_data.get('category')
         type=self.cleaned_data.get('type')
         mobile=self.cleaned_data.get('mobile')
@@ -54,7 +53,7 @@ class GameAccountForm(forms.ModelForm):
         now = timezone.now()
         start_date = timezone.make_aware(timezone.datetime(now.year, now.month, 1), timezone.get_current_timezone())
         end_date = timezone.make_aware(timezone.datetime(now.year, now.month, 1) + timezone.timedelta(days=30), timezone.get_current_timezone())
-
+        print(name,images,mobile,type,category)
         
     
         # Count the number of game accounts created by the company in the current month
@@ -62,35 +61,26 @@ class GameAccountForm(forms.ModelForm):
 
         # Check if the limit has been reached
         if count >= 10:
-            self.add_error('company',"You cannot add more than 10 game accounts in a month.")
-        elif  company and name  and price and images and category and type and mobile:
+            self.add_error('name',"You cannot add more than 10 game accounts in a month.")
+        elif   name  and price and images and category and type and mobile:
                 if name:
                     name=name.strip()
                     name_spaces = name.replace(" ", "")       
-                    if not name_spaces.isalpha():
+                    if  name_spaces.isdigit():
                         self.add_error('name','Please enter only letters in the name')
 
                 elif mobile:
-                    check=True
-                    mobile_regex = r'^\+?[0-9]{1,3}\s*\(?[0-9]{3}\)?[-.\s]*[0-9]{3}[-.\s]*[0-9]{4}$'
-                    mobile_validator = RegexValidator(regex=mobile_regex)
-                    try:
-                        mobile_validator(mobile)
-                    except ValidationError:
-                        
-                        check=False
-                        self.add_error('mobile','Invalid Phone number')
+                    azerbaijan_mobile_regex = r'^\+994(?:50|51|55|70|77|99)\d{7}$'
+                    azerbaijan_mobile_validator = RegexValidator(
+                    regex=azerbaijan_mobile_regex)
+                    if not mobile_number.startswith("+994"):
+                        mobile_number = "+994" + mobile_number[1:]
 
-                    if check == True:
-                            
-                            try:
-                                parsed_number = parse(mobile)
-                                if not is_valid_number(parsed_number):
-                                    self.cleaned_data['check_monile']=False
-                                    self.add_error('mobile','Invalid Phone number')
-                            except NumberParseException:
-                                self.cleaned_data['check_monile']=False
-                                self.add_error("mobile",'Invalid Phone number')
+                        try:
+                            azerbaijan_mobile_validator(mobile_number)
+                            print('Mobile number is valid')
+                        except ValidationError:
+                            self.add_error('mobile','Please enter the valid phone number')
         else:
              self.add_error('name','This * field is required')
                      
@@ -98,9 +88,9 @@ class GameAccountForm(forms.ModelForm):
         
 
     def save(self,*args,**kwargs):
+            company=Company.objects.get(user=self.user)
             
             name=self.cleaned_data.get('name')
-            company=self.cleaned_data.get('company')
             category=self.cleaned_data.get('category')
             price=self.cleaned_data.get('price')
             description=self.cleaned_data.get('description')
@@ -128,8 +118,6 @@ class GameAccountForm(forms.ModelForm):
                     mobile=mobile
                 )
             for i in image:
-                print('esselee')
-                print(i)
                 GameAccountGallery.objects.create(
                     game=game_account,
                     image=i
@@ -160,7 +148,6 @@ class CreateCompanyForm(forms.ModelForm):
         name=self.cleaned_data.get('name')
         icon=self.cleaned_data.get('icon')
         bio=self.cleaned_data.get('bio')
-        print(type(icon))
         if  name:
 
             if name:
@@ -193,7 +180,7 @@ class CreateCompanyForm(forms.ModelForm):
             bio=self.cleaned_data.get('bio')
 
             if bio :
-                Company.objects.create(
+                Company.objects.get_or_create(
                     user=user,
                     name=name,
                     bio=bio
@@ -306,3 +293,146 @@ class CompanyAccountForm(forms.ModelForm):
     
 
 
+
+
+
+
+class EditGameAccountForm(forms.ModelForm):
+    image=forms.FileField()
+    mobile=forms.CharField(max_length=13)
+    class Meta:
+        model = GameAccount
+        exclude=('company',)
+
+   
+    def __init__(self,user,gameacc,remove_img_list,*args, **kwargs):
+        self.remove_img_list=remove_img_list
+        self.user=user
+        self.gameacc=gameacc
+        super().__init__(*args, **kwargs)
+        self.fields['category'].empty_label='-------Category'
+        self.fields['type'].empty_label='-------Type'
+        self.fields['description'].widget.attrs.update({'placeholder':'Description'})
+        for field_name, field in self.fields.items():
+            field.required = False
+
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+            "class": "form-control",'safe': True     
+        })
+
+        
+      
+            
+
+    def clean(self):
+        self.cleaned_data['check_name']=True
+        self.cleaned_data['check_category']=True
+        self.cleaned_data['check_mobile']=True
+        self.cleaned_data['check_type']=True
+        self.cleaned_data['check_description']=True
+        self.cleaned_data['check_price']=True
+        self.cleaned_data['exists']=True
+        
+
+        name=self.cleaned_data.get('name')
+        description=self.cleaned_data.get('description')
+        price=self.cleaned_data.get('price')
+        category=self.cleaned_data.get('category')
+        type=self.cleaned_data.get('type')
+        mobile=self.cleaned_data.get('mobile')
+        remove_img=self.remove_img_list 
+        print(remove_img)  
+   
+    
+                     
+
+        if remove_img[0] == ""  and name ==  self.gameacc.name   and price == self.gameacc.price and description == self.gameacc.description and type == self.gameacc.type and mobile == self.gameacc.mobile and category == self.gameacc.category:
+             self.cleaned_data['exists']=False
+        elif    name  and price  and category and type and mobile :
+                if name:
+                    name=name.strip()
+                    name_spaces = name.replace(" ", "")       
+                    if  name_spaces.isdigit():
+                        self.add_error('name','Please enter only letters in the name')
+                elif mobile:
+                    azerbaijan_mobile_regex = r'^\+994(?:50|51|55|70|77|99)\d{7}$'
+                    azerbaijan_mobile_validator = RegexValidator(
+                    regex=azerbaijan_mobile_regex)
+                    if not mobile_number.startswith("+994"):
+                        mobile_number = "+994" + mobile_number[1:]
+
+                        try:
+                            azerbaijan_mobile_validator(mobile_number)
+                            print('Mobile number is valid')
+                        except ValidationError:
+                            self.add_error('mobile','Please enter the valid phone number')
+        else:
+             self.add_error('name','This * field is required')
+
+        if name == self.gameacc.name:
+                     self.cleaned_data['check_name']=False
+
+        if category == self.gameacc.category:
+                     self.cleaned_data['check_category']=False
+        
+        if mobile == self.gameacc.mobile:
+                     self.cleaned_data['check_mobile']=False
+
+        if price == self.gameacc.price:
+                     self.cleaned_data['check_price']=False
+        
+        if type == self.gameacc.type:
+                     self.cleaned_data['check_type']=False
+
+        if description == self.gameacc.description:
+                     self.cleaned_data['check_description']=False
+                     
+
+        
+
+    def save(self, *args,**kwargs):            
+            name=self.cleaned_data.get('name')
+            category=self.cleaned_data.get('category')
+            price=self.cleaned_data.get('price')
+            description=self.cleaned_data.get('description')
+            type=self.cleaned_data.get('type')
+            mobile=self.cleaned_data.get('mobile')
+            remove_img=self.remove_img_list
+            
+            
+            if self.cleaned_data.get('exists'):
+
+                if  not remove_img[0] == "":
+                      for img_id in remove_img:
+                            img_id=img_id.replace(",","")
+                            GameAccountGallery.objects.filter(id=img_id).delete()
+
+                if name:
+                      self.gameacc.name=name
+                      self.gameacc.save()
+
+                if category:
+                      self.gameacc.category=category
+                      self.gameacc.save()
+
+
+                if price:
+                      self.gameacc.price=price
+                      self.gameacc.save()
+
+
+                if  description:
+                      self.gameacc.description=description
+                      self.gameacc.save()
+
+                if type:
+                      self.gameacc.type=type
+                      self.gameacc.save()
+
+                if mobile:
+                      self.gameacc.mobile=mobile
+                      self.gameacc.save()
+
+
+                
